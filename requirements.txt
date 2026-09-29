@@ -9,3 +9,4 @@ plotly
 streamlit
 statsmodels
 xgboost
+groq

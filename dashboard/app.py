@@ -1,7 +1,23 @@
-import streamlit as st
-import pandas as pd
+import sys
 from pathlib import Path
 
+import streamlit as st
+import pandas as pd
+
+
+# --------------------------------------
+# Project Root
+# --------------------------------------
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+
+# --------------------------------------
+# Dashboard Sections
+# --------------------------------------
 
 from sections.executive_overview import render as render_executive_overview
 from sections.store_performance import render as render_store_performance
@@ -93,11 +109,7 @@ section[data-testid="stSidebar"] * {
     align-items: center;
     justify-content: center;
 
-    background: linear-gradient(
-        135deg,
-        #16c7ff,
-        #2878ff
-    );
+    background: linear-gradient(135deg, #16c7ff, #2878ff);
 
     color: white;
 
@@ -200,12 +212,12 @@ section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checke
 }
 
 
-/* Hide native radio circle */
+/* Hide native radio circle
+   (several selectors so it works across Streamlit versions) */
 
-section[data-testid="stSidebar"]
-div[role="radiogroup"]
-> label
-> div:first-child {
+section[data-testid="stSidebar"] div[role="radiogroup"] > label > div:first-child,
+section[data-testid="stSidebar"] div[role="radiogroup"] label[data-baseweb="radio"] > div:first-child,
+section[data-testid="stSidebar"] div[role="radiogroup"] label > span:first-child:empty {
     display: none !important;
 }
 
@@ -215,11 +227,7 @@ div[role="radiogroup"]
 ====================================== */
 
 .retailiq-header {
-    background: linear-gradient(
-        135deg,
-        #082348,
-        #0c315f
-    );
+    background: linear-gradient(135deg, #082348, #0c315f);
 
     border: 1px solid rgba(45,113,177,0.55);
 
@@ -227,8 +235,7 @@ div[role="radiogroup"]
 
     padding: 14px 20px;
 
-    box-shadow:
-        0 10px 30px rgba(5,29,58,0.16);
+    box-shadow: 0 10px 30px rgba(5,29,58,0.16);
 }
 
 .header-row {
@@ -247,19 +254,14 @@ div[role="radiogroup"]
     align-items: center;
     justify-content: center;
 
-    background: linear-gradient(
-        135deg,
-        #16c7ff,
-        #2878ff
-    );
+    background: linear-gradient(135deg, #16c7ff, #2878ff);
 
     color: white;
 
     font-size: 21px;
     font-weight: 800;
 
-    box-shadow:
-        0 8px 20px rgba(23,137,255,0.25);
+    box-shadow: 0 8px 20px rgba(23,137,255,0.25);
 }
 
 .header-title {
@@ -287,10 +289,13 @@ div[data-baseweb="select"] > div {
 
 
 /* ======================================
-   Section
+   Section Container
+   .executive-container      -> legacy HTML wrapper
+   .st-key-executive-container -> st.container(key="executive-container")
 ====================================== */
 
-.executive-container {
+.executive-container,
+.st-key-executive-container {
     background: white;
 
     border: 1px solid #e0e8f2;
@@ -299,8 +304,7 @@ div[data-baseweb="select"] > div {
 
     padding: 28px 30px 32px;
 
-    box-shadow:
-        0 12px 35px rgba(25,55,90,0.08);
+    box-shadow: 0 12px 35px rgba(25,55,90,0.08);
 }
 
 .section-kicker {
@@ -349,52 +353,27 @@ div[data-baseweb="select"] > div {
 
     min-height: 132px;
 
-    box-shadow:
-        0 6px 20px rgba(25,55,90,0.05);
+    box-shadow: 0 6px 20px rgba(25,55,90,0.05);
 }
 
 .kpi-revenue {
     border-top: 4px solid #19b9a5;
-
-    background:
-        linear-gradient(
-            145deg,
-            #f5fffc,
-            white
-        );
+    background: linear-gradient(145deg, #f5fffc, white);
 }
 
 .kpi-units {
     border-top: 4px solid #2878ff;
-
-    background:
-        linear-gradient(
-            145deg,
-            #f5f9ff,
-            white
-        );
+    background: linear-gradient(145deg, #f5f9ff, white);
 }
 
 .kpi-products {
     border-top: 4px solid #8267f7;
-
-    background:
-        linear-gradient(
-            145deg,
-            #faf8ff,
-            white
-        );
+    background: linear-gradient(145deg, #faf8ff, white);
 }
 
 .kpi-risk {
     border-top: 4px solid #ef6a79;
-
-    background:
-        linear-gradient(
-            145deg,
-            #fff7f8,
-            white
-        );
+    background: linear-gradient(145deg, #fff7f8, white);
 }
 
 .kpi-icon {
@@ -439,8 +418,7 @@ div[data-baseweb="select"] > div {
 
     padding: 17px 18px 8px;
 
-    box-shadow:
-        0 6px 20px rgba(25,55,90,0.05);
+    box-shadow: 0 6px 20px rgba(25,55,90,0.05);
 }
 
 .chart-title {
@@ -465,12 +443,7 @@ div[data-baseweb="select"] > div {
 ====================================== */
 
 .info-box {
-    background:
-        linear-gradient(
-            135deg,
-            #eaf6ff,
-            #f7fbff
-        );
+    background: linear-gradient(135deg, #eaf6ff, #f7fbff);
 
     border: 1px solid #cfe7fb;
 
@@ -529,13 +502,7 @@ div[data-testid="stDataFrame"] {
 # Data
 # --------------------------------------
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-
-PROCESSED_DIR = (
-    PROJECT_ROOT
-    / "data"
-    / "processed"
-)
+PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
 @st.cache_data
@@ -565,13 +532,8 @@ def load_data():
         PROCESSED_DIR / "dim_product.csv"
     )
 
-    fact_sales["date"] = pd.to_datetime(
-        fact_sales["date"]
-    )
-
-    fact_forecast["date"] = pd.to_datetime(
-        fact_forecast["date"]
-    )
+    fact_sales["date"] = pd.to_datetime(fact_sales["date"])
+    fact_forecast["date"] = pd.to_datetime(fact_forecast["date"])
 
     return (
         executive,
@@ -600,9 +562,7 @@ try:
 
 except Exception as e:
 
-    st.error(
-        "RetailIQ could not load the processed datasets."
-    )
+    st.error("RetailIQ could not load the processed datasets.")
 
     st.code(str(e))
 
@@ -615,10 +575,8 @@ except Exception as e:
 
 with st.sidebar:
 
-    # IMPORTANT:
-    # Keep this HTML on ONE line.
-    # This prevents Streamlit from rendering
-    # nested HTML as Markdown code.
+    # IMPORTANT: keep this HTML on ONE line so Streamlit's Markdown
+    # parser never turns it into a code block.
 
     st.markdown(
         '<div class="sidebar-brand"><div class="sidebar-logo">▥</div><div class="sidebar-title">RetailIQ</div><div class="sidebar-subtitle">AI-Powered Business Intelligence</div></div>',
@@ -631,23 +589,12 @@ with st.sidebar:
     )
 
     navigation_options = {
-        "01  ▣  Executive Overview":
-            "Executive Overview",
-
-        "02  ◫  Store Performance":
-            "Store Performance",
-
-        "03  ◈  Product & Sales Intelligence":
-            "Product & Sales Intelligence",
-
-        "04  ◔  Demand Forecast":
-            "Demand Forecast",
-
-        "05  ◇  Inventory & Risk":
-            "Inventory & Risk",
-
-        "06  ✦  AI Business Recommendation":
-            "AI Business Recommendation",
+        "01  ▣  Executive Overview": "Executive Overview",
+        "02  ◫  Store Performance": "Store Performance",
+        "03  ◈  Product & Sales Intelligence": "Product & Sales Intelligence",
+        "04  ◔  Demand Forecast": "Demand Forecast",
+        "05  ◇  Inventory & Risk": "Inventory & Risk",
+        "06  ✦  AI Business Recommendation": "AI Business Recommendation",
     }
 
     selected_navigation = st.radio(
@@ -657,24 +604,18 @@ with st.sidebar:
         label_visibility="collapsed",
     )
 
-    selected_section = navigation_options[
-        selected_navigation
-    ]
+    selected_section = navigation_options[selected_navigation]
 
 
 # --------------------------------------
 # Main Header
 # --------------------------------------
 
-header, store_column = st.columns(
-    [3.5, 1]
-)
-
+header, store_column = st.columns([3.5, 1])
 
 with header:
 
-    # IMPORTANT:
-    # Keep this HTML on ONE line.
+    # IMPORTANT: keep this HTML on ONE line.
 
     st.markdown(
         '<div class="retailiq-header"><div class="header-row"><div class="header-logo">▥</div><div><div class="header-title">RetailIQ</div><div class="header-subtitle">AI-Powered Business Intelligence</div></div></div></div>',
@@ -694,10 +635,7 @@ stores = sorted(
 
 with store_column:
 
-    selected_store = st.selectbox(
-        "Store",
-        stores,
-    )
+    selected_store = st.selectbox("Store", stores)
 
 
 # --------------------------------------
@@ -714,7 +652,6 @@ if selected_section == "Executive Overview":
         selected_store,
     )
 
-
 elif selected_section == "Store Performance":
 
     render_store_performance(
@@ -724,7 +661,6 @@ elif selected_section == "Store Performance":
         dim_product,
         selected_store,
     )
-
 
 elif selected_section == "Product & Sales Intelligence":
 
@@ -736,7 +672,6 @@ elif selected_section == "Product & Sales Intelligence":
         selected_store,
     )
 
-
 elif selected_section == "Demand Forecast":
 
     render_demand_forecast(
@@ -744,7 +679,6 @@ elif selected_section == "Demand Forecast":
         fact_forecast,
         selected_store,
     )
-
 
 elif selected_section == "Inventory & Risk":
 
@@ -754,7 +688,6 @@ elif selected_section == "Inventory & Risk":
         dim_product,
         selected_store,
     )
-
 
 elif selected_section == "AI Business Recommendation":
 

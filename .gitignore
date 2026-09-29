@@ -31,4 +31,4 @@ Thumbs.db
 
 # Large M5 datasets
 data/raw/
-data/processed/
+# data/processed/

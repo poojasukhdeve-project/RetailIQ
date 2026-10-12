@@ -513,7 +513,7 @@ def load_data():
     )
 
     fact_sales = pd.read_parquet(
-        PROCESSED_DIR / "fact_sales.parquet"
+        PROCESSED_DIR / "fact_sales_optimized.parquet"
     )
 
     fact_forecast = pd.read_parquet(

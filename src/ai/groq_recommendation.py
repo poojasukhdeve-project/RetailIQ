@@ -22,7 +22,7 @@ except Exception:
 from groq import Groq
 
 
-MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
 
 SYSTEM_PROMPT = """You are a senior retail operations analyst advising a store manager.

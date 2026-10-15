@@ -2,8 +2,6 @@
 
 RetailIQ is an end-to-end retail analytics application that transforms historical Walmart sales data into business insights, demand forecasts, inventory-risk signals, and actionable recommendations. It combines Python analytics, SQL/DuckDB, machine learning, and a Streamlit dashboard, with an optional Groq-powered AI explanation layer.
 
-**Live dashboard:** https://retailiq-hnxcr5qvazmbq45nbq9bar.streamlit.app/
-
 **GitHub repository:** https://github.com/poojasukhdeve-project/RetailIQ
 
 ---
